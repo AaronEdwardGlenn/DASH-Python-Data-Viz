@@ -1,22 +1,25 @@
 import dash
+from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 
 app = dash.Dash()
 
 app.layout = html.Div(children=[
-    html.H1('DASH project'),
-    dcc.Graph(id='example',
-              figure={
-                  'data': [
-                      {'x': [1, 2, 3, 4, 5, 6], 'y': [5, 6, 7, 8, 9], 'type':'line', 'name':'boats'},
-                      {'x': [1, 2, 3, 4, 5], 'y': [9, 8, 7, 19, 5], 'type':'bar', 'name':'ships'},
-                  ],
-                  'layout': {
-                      'title': 'Example with Dash',
-                  }
-              })
+    dcc.Input(id='input', value='cool value', type='text'),
+    html.Div(id='output')
 ])
+
+
+@app.callback(
+    Output(component_id='output', component_property='children'),
+    [Input(component_id='input', component_property='value')])
+def new_value(input_data):
+    try:
+        return str(float(input_data)**4)
+    except:
+        return 'Some Error'
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
